@@ -1,16 +1,35 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import navigation.Navigation
+import navigation.NavigationItem
+import pages.FirstPage
+import pages.SecondPage
+import pages.ThirdPage
 
 @Composable
 fun App() {
     MaterialTheme {
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Hello " + getPlatformName())
-        }
+        Navigation(
+            navigationItems = listOf(
+                NavigationItem(
+                    page = { FirstPage() },
+                    unselectedIcon = Filled.Check,
+                    selectedIcon = Filled.Check,
+                    label = "First"
+                ), NavigationItem(
+                    page = { SecondPage() },
+                    unselectedIcon = Filled.Check,
+                    selectedIcon = Filled.Check,
+                    label = "Second"
+                ), NavigationItem(
+                    page = { ThirdPage() },
+                    unselectedIcon = Filled.Check,
+                    selectedIcon = Filled.Check,
+                    label = "Third"
+                )
+            )
+        )
     }
 }
