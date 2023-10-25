@@ -10,7 +10,9 @@ import ui.theme.AppTheme
 
 @Composable
 fun App() {
-    AppTheme(useDarkTheme = false) {
+    AppTheme(
+        useDarkTheme = true // DEBUG: light and dark theme
+    ) {
         Navigation(
             navigationItems = listOf(
                 NavigationItem(
