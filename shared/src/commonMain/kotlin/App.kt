@@ -1,16 +1,16 @@
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import navigation.Navigation
 import navigation.NavigationItem
 import pages.FirstPage
 import pages.SecondPage
 import pages.ThirdPage
+import ui.theme.AppTheme
 
 @Composable
 fun App() {
-    MaterialTheme {
+    AppTheme(useDarkTheme = false) {
         Navigation(
             navigationItems = listOf(
                 NavigationItem(
