@@ -1,4 +1,4 @@
-package navigation
+package com.lennartmoeller.ma.composemultiplatform.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints

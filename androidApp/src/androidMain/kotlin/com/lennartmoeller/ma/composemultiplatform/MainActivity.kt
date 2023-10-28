@@ -1,4 +1,4 @@
-package com.myapplication
+package com.lennartmoeller.ma.composemultiplatform
 
 import MainView
 import android.os.Bundle

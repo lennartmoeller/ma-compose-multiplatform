@@ -1,4 +1,4 @@
-package ui.theme
+package com.lennartmoeller.ma.composemultiplatform.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

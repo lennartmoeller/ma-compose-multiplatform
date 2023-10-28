@@ -1,0 +1,38 @@
+CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY, label TEXT NOT NULL, start_balance INTEGER NOT NULL DEFAULT 0);
+
+CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, label TEXT NOT NULL, type INTEGER NOT NULL DEFAULT 2);
+
+CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY, date TEXT NOT NULL, account INTEGER NOT NULL, category INTEGER NOT NULL, description TEXT, amount INTEGER NOT NULL);
+
+clearAccounts:
+DELETE FROM accounts;
+
+clearCategories:
+DELETE FROM categories;
+
+clearTransactions:
+DELETE FROM transactions;
+
+getAccounts:
+SELECT accounts.*
+FROM accounts;
+
+getCategories:
+SELECT categories.*
+FROM categories;
+
+getTransactions:
+SELECT transactions.*
+FROM transactions;
+
+insertAccount:
+INSERT INTO accounts(id, label, start_balance)
+VALUES(?, ?, ?);
+
+insertCategory:
+INSERT INTO categories(id, label, type)
+VALUES(?, ?, ?);
+
+insertTransaction:
+INSERT INTO transactions(id, date, account, category, description, amount)
+VALUES(?, ?, ?, ?, ?, ?);
