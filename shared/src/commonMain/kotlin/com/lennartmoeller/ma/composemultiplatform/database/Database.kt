@@ -31,47 +31,35 @@ class Database {
             }
         }
 
-        fun getAccounts(): List<Account> {
-            fun mapAccountSelecting(id: Long, label: String, startBalance: Long): Account {
-                return Account(
-                    id = id.toInt(),
-                    label = label,
-                    startBalance = startBalance.toInt(),
+        fun getAccounts(): Map<Int, Account> {
+            return query.getAccounts { id, label, startBalance ->
+                Account(
+                    id = id.toInt(), label = label, startBalance = startBalance.toInt()
                 )
-            }
-            return query.getAccounts(::mapAccountSelecting).executeAsList()
+            }.executeAsList().associateBy { it.id }
         }
 
-        fun getCategories(): List<Category> {
-            fun mapCategorySelecting(id: Long, label: String, type: Long): Category {
-                return Category(
+        fun getCategories(): Map<Int, Category> {
+            return query.getCategories { id, label, type ->
+                Category(
                     id = id.toInt(),
                     label = label,
-                    type = type.toInt(),
+                    type = type.toInt()
                 )
-            }
-            return query.getCategories(::mapCategorySelecting).executeAsList()
+            }.executeAsList().associateBy { it.id }
         }
 
-        fun getTransactions(): List<Transaction> {
-            fun mapTransactionSelecting(
-                id: Long,
-                date: String,
-                account: Long,
-                category: Long,
-                description: String?,
-                amount: Long
-            ): Transaction {
-                return Transaction(
+        fun getTransactions(): Map<Int, Transaction> {
+            return query.getTransactions { id, date, account, category, description, amount ->
+                Transaction(
                     id = id.toInt(),
                     date = date,
                     account = account.toInt(),
-                    category.toInt(),
+                    category = category.toInt(),
                     description = description ?: "",
-                    amount = amount.toInt(),
+                    amount = amount.toInt()
                 )
-            }
-            return query.getTransactions(::mapTransactionSelecting).executeAsList()
+            }.executeAsList().associateBy { it.id }
         }
 
         fun insertAccount(account: Account) {

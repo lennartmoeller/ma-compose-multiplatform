@@ -1,3 +1,5 @@
+package com.lennartmoeller.ma.composemultiplatform
+
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
@@ -9,7 +11,7 @@ import com.lennartmoeller.ma.composemultiplatform.pages.AccountsPage
 import com.lennartmoeller.ma.composemultiplatform.pages.CategoriesPage
 import com.lennartmoeller.ma.composemultiplatform.pages.TransactionsPage
 import com.lennartmoeller.ma.composemultiplatform.ui.theme.AppTheme
-import com.lennartmoeller.ma.composemultiplatform.utility.http.HttpHelper
+import com.lennartmoeller.ma.composemultiplatform.utility.HttpHelper
 import kotlinx.coroutines.runBlocking
 
 @Composable

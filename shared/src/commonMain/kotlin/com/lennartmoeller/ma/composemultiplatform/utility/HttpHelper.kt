@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.utility.http
+package com.lennartmoeller.ma.composemultiplatform.utility
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get

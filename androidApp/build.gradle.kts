@@ -35,4 +35,8 @@ android {
     kotlin {
         jvmToolchain(17)
     }
+    // workaround to fix https://youtrack.jetbrains.com/issue/KTOR-6362
+    packaging {
+        resources.excludes.add("META-INF/versions/**")
+    }
 }

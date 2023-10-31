@@ -1,6 +1,5 @@
 package com.lennartmoeller.ma.composemultiplatform.navigation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +12,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
@@ -48,7 +48,7 @@ fun Navigation(navigationItems: List<NavigationItem>) {
                     }
                 },
             ) { innerPadding ->
-                Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(innerPadding)) {
+                Surface(modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(innerPadding)) {
                     navigationItems[currentPageIndex].page()
                 }
             }
@@ -73,7 +73,7 @@ fun Navigation(navigationItems: List<NavigationItem>) {
                             )
                         }
                     }
-                    Box(modifier = Modifier.fillMaxHeight().fillMaxWidth()) {
+                    Surface(modifier = Modifier.fillMaxHeight().fillMaxWidth()) {
                         navigationItems[currentPageIndex].page()
                     }
                 }

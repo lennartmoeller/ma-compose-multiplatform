@@ -1,19 +1,23 @@
 package com.lennartmoeller.ma.composemultiplatform.pages
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.lennartmoeller.ma.composemultiplatform.database.Database
+import com.lennartmoeller.ma.composemultiplatform.entities.Account
 
 @Composable
 fun AccountsPage() {
-    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-        Database.getAccounts().forEach {
-            ListItem(headlineContent = { Text(it.label) })
+    val accounts: List<Account> = Database.getAccounts().values.toList().sortedBy { it.label }
+    LazyColumn {
+        items(count = accounts.size) { index ->
+            val account: Account = accounts[index]
+            ListItem(
+                headlineContent = { Text(account.label) }
+            )
+            Divider()
         }
     }
 }
