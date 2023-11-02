@@ -2,12 +2,12 @@ package com.lennartmoeller.ma.composemultiplatform.pages
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +21,8 @@ import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
 import com.lennartmoeller.ma.composemultiplatform.entities.Transaction
+import com.lennartmoeller.ma.composemultiplatform.ui.Divider
+import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
 import com.lennartmoeller.ma.composemultiplatform.utility.GermanDate
 import com.lennartmoeller.ma.composemultiplatform.utility.Money
 
@@ -31,12 +33,14 @@ fun TransactionsPage() {
     val categories: Map<Int, Category> = Database.getCategories()
     val transactionsGrouped: Map<String, List<Transaction>> =
         Database.getTransactions().values.sortedBy { it.date }.groupBy({ it.date }, { it })
-    LazyColumn {
+    LazyColumn(contentPadding = PaddingValues(bottom = SkeletonState.PAGE_BOTTOM_PADDING)) {
         transactionsGrouped.forEach { (date, transactions) ->
             stickyHeader {
-                Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                         text = GermanDate(date).beautifyDate()
                     )
@@ -65,7 +69,8 @@ fun TransactionsPage() {
                         }
                     },
                 )
-                Divider()
+                // divider if not last item
+                if (index < transactions.size - 1) Divider(1)
             }
         }
     }

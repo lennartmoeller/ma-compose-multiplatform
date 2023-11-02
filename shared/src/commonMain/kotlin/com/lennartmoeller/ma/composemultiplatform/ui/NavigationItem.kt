@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.navigation
+package com.lennartmoeller.ma.composemultiplatform.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
