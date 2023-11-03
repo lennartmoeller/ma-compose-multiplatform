@@ -2,9 +2,6 @@ package com.lennartmoeller.ma.composemultiplatform.pages
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,15 +16,7 @@ fun CategoriesPage() {
     LazyColumn(contentPadding = PaddingValues(bottom = SkeletonState.PAGE_BOTTOM_PADDING)) {
         items(count = categories.size) { index ->
             val category: Category = categories[index]
-            ListItem(
-                headlineContent = { Text(category.label) },
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.Favorite,
-                        contentDescription = "Localized description",
-                    )
-                }
-            )
+            ListItem(headlineContent = { Text(category.label) })
             // divider if not last item
             if (index < categories.size - 1) Divider(1)
         }

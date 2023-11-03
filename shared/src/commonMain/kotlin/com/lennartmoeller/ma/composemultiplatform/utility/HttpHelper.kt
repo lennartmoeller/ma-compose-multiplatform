@@ -19,7 +19,8 @@ class HttpHelper {
             if (response.status.value != 200) {
                 throw Exception("Failed to load data from the API")
             }
-            return Json.decodeFromString(response.bodyAsText())
+            val json = Json { ignoreUnknownKeys = true }
+            return json.decodeFromString(response.bodyAsText())
         }
     }
 }

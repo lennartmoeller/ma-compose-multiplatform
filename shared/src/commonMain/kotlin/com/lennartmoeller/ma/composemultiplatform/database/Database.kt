@@ -16,6 +16,7 @@ class Database {
                 // clear the whole database
                 query.clearAccounts()
                 query.clearCategories()
+                query.clearIcons()
                 query.clearTransactions()
                 // insert the initial data
                 initialData.accounts.values.forEach { account ->
@@ -24,10 +25,12 @@ class Database {
                 initialData.categories.values.forEach { category ->
                     insertCategory(category)
                 }
+                initialData.icons.entries.forEach { (id, svg) ->
+                    insertIcon(id, svg)
+                }
                 initialData.transactions.values.forEach { transaction ->
                     insertTransaction(transaction)
                 }
-                // TODO: Add insert categories, insert transactions
             }
         }
 
@@ -40,13 +43,20 @@ class Database {
         }
 
         fun getCategories(): Map<Int, Category> {
-            return query.getCategories { id, label, type ->
+            return query.getCategories { id, label, type, icon ->
                 Category(
                     id = id.toInt(),
                     label = label,
-                    type = type.toInt()
+                    type = type.toInt(),
+                    icon = icon,
                 )
             }.executeAsList().associateBy { it.id }
+        }
+
+        fun getIcons(): Map<String, String> {
+            return query.getIcons { id, svg ->
+                id to svg
+            }.executeAsList().toMap()
         }
 
         fun getTransactions(): Map<Int, Transaction> {
@@ -75,6 +85,14 @@ class Database {
                 id = category.id.toLong(),
                 label = category.label,
                 type = category.type.toLong(),
+                icon = category.icon,
+            )
+        }
+
+        fun insertIcon(id: String, svg: String) {
+            query.insertIcon(
+                id = id,
+                svg = svg,
             )
         }
 

@@ -8,4 +8,5 @@ data class Category(
     @SerialName("id") var id: Int,
     @SerialName("label") var label: String,
     @SerialName("type") var type: Int,
+    @SerialName("icon") var icon: String?,
 )
