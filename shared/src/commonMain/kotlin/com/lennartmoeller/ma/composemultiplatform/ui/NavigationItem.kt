@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavigationItem(
     val page: @Composable () -> Unit,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector,
+    val icon: String,
     val label: String
 )

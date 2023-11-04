@@ -7,11 +7,11 @@ build/
 /captures
 .externalNativeBuild
 .cxx
+iosApp/Configuration/Config.xcconfig
 iosApp/Podfile.lock
 iosApp/Pods/*
 iosApp/iosApp.xcworkspace/*
 iosApp/iosApp.xcodeproj/*
 !iosApp/iosApp.xcodeproj/project.pbxproj
 shared/shared.podspec
-
-iosApp/Configuration/Config.xcconfig
+/shared/src/commonMain/resources/fonts/

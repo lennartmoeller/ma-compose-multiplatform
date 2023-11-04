@@ -218,10 +218,10 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
 
     @Composable
     private fun NavigationIcon(navigationItem: NavigationItem, isSelected: Boolean) {
-        Icon(
-            imageVector = if (isSelected) navigationItem.selectedIcon else navigationItem.unselectedIcon,
-            contentDescription = navigationItem.label,
-            modifier = Modifier.alpha(if (!isSelected) NAV_ITEM_UNSELECTED_OPACITY else 1F)
+        FontAwesomeIcon(
+            name = navigationItem.icon,
+            style = if (isSelected) SolidStyle() else RegularStyle(),
+            opacity = if (isSelected) .9f else NAV_ITEM_UNSELECTED_OPACITY,
         )
     }
 

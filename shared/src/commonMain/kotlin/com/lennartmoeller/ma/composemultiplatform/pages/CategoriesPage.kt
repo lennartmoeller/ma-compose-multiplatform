@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
 import com.lennartmoeller.ma.composemultiplatform.ui.Divider
+import com.lennartmoeller.ma.composemultiplatform.ui.FontAwesomeIcon
 import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
 
 @Composable
@@ -16,8 +17,11 @@ fun CategoriesPage() {
     LazyColumn(contentPadding = PaddingValues(bottom = SkeletonState.PAGE_BOTTOM_PADDING)) {
         items(count = categories.size) { index ->
             val category: Category = categories[index]
-            ListItem(headlineContent = { Text(category.label) })
-            // divider if not last item
+            ListItem(
+                headlineContent = { Text(category.label) },
+                leadingContent = { FontAwesomeIcon(name = category.icon) }
+            )
+            // divider between items
             if (index < categories.size - 1) Divider(1)
         }
     }

@@ -3,6 +3,7 @@ package com.lennartmoeller.ma.composemultiplatform.database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
 import com.lennartmoeller.ma.composemultiplatform.entities.Data
+import com.lennartmoeller.ma.composemultiplatform.entities.Icon
 import com.lennartmoeller.ma.composemultiplatform.entities.Transaction
 
 class Database {
@@ -25,8 +26,8 @@ class Database {
                 initialData.categories.values.forEach { category ->
                     insertCategory(category)
                 }
-                initialData.icons.entries.forEach { (id, svg) ->
-                    insertIcon(id, svg)
+                initialData.icons.values.forEach { icon ->
+                    insertIcon(icon)
                 }
                 initialData.transactions.values.forEach { transaction ->
                     insertTransaction(transaction)
@@ -35,9 +36,9 @@ class Database {
         }
 
         fun getAccounts(): Map<Int, Account> {
-            return query.getAccounts { id, label, startBalance ->
+            return query.getAccounts { id, label, startBalance, icon ->
                 Account(
-                    id = id.toInt(), label = label, startBalance = startBalance.toInt()
+                    id = id.toInt(), label = label, startBalance = startBalance.toInt(), icon = icon
                 )
             }.executeAsList().associateBy { it.id }
         }
@@ -53,10 +54,8 @@ class Database {
             }.executeAsList().associateBy { it.id }
         }
 
-        fun getIcons(): Map<String, String> {
-            return query.getIcons { id, svg ->
-                id to svg
-            }.executeAsList().toMap()
+        fun getIconUnicode(name: String): String? {
+            return query.getIconUnicode(name).executeAsOneOrNull()
         }
 
         fun getTransactions(): Map<Int, Transaction> {
@@ -77,6 +76,7 @@ class Database {
                 id = account.id.toLong(),
                 label = account.label,
                 start_balance = account.startBalance.toLong(),
+                icon = account.icon,
             )
         }
 
@@ -89,10 +89,10 @@ class Database {
             )
         }
 
-        fun insertIcon(id: String, svg: String) {
+        fun insertIcon(icon: Icon) {
             query.insertIcon(
-                id = id,
-                svg = svg,
+                name = icon.name,
+                unicode = icon.unicode,
             )
         }
 
