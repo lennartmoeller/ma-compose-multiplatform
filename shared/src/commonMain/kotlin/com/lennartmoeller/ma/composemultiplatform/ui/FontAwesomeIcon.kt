@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -26,7 +28,8 @@ fun FontAwesomeIcon(
     name: String? = null,
     style: Font = SolidStyle(),
     size: TextUnit = 20.sp,
-    opacity: Float = 1f
+    opacity: Float = 1f,
+    color: Color = Color.Unspecified,
 ) {
     // unicode is preferred over name
     // use question mark if both are null
@@ -48,58 +51,65 @@ fun FontAwesomeIcon(
     ) {
         Text(
             text = unicodeStr,
-            style = TextStyle(
-                fontFamily = FontFamily(style),
-                fontSize = size
-            ),
+            fontFamily = FontFamily(style),
+            fontSize = size,
+            color = color,
             maxLines = 1,
             overflow = TextOverflow.Visible,
-            modifier = Modifier.alpha(realOpacity)
+            modifier = Modifier
+                .alpha(realOpacity)
+                // icons are a little too high, so move them down
+                .drawWithContent {
+                    val shift = size * 0.05 // got 0.05 by trying
+                    translate(top = shift.toPx()) {
+                        this@drawWithContent.drawContent()
+                    }
+                }
         )
     }
 }
 
 @Composable
 fun BrandsStyle(): Font {
-    return Font("fa-brands", "fa-brands-400", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_brands", "fa_brands_400", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun DuotoneStyle(): Font {
-    return Font("fa-duotone", "fa-duotone-900", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_duotone", "fa_duotone_900", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun LightStyle(): Font {
-    return Font("fa-light", "fa-light-300", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_light", "fa_light_300", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun RegularStyle(): Font {
-    return Font("fa-regular", "fa-regular-400", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_regular", "fa_regular_400", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun SharpLightStyle(): Font {
-    return Font("fa-sharp-light", "fa-sharp-light-300", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_sharp_light", "fa_sharp_light_300", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun SharpRegularStyle(): Font {
-    return Font("fa-sharp-regular", "fa-sharp-regular-400", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_sharp_regular", "fa_sharp_regular_400", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun SharpSolidStyle(): Font {
-    return Font("fa-sharp-solid", "fa-sharp-solid-900", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_sharp_solid", "fa_sharp_solid_900", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun SolidStyle(): Font {
-    return Font("fa-solid", "fa-solid-900", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_solid", "fa_solid_900", FontWeight.Normal, FontStyle.Normal)
 }
 
 @Composable
 fun ThinStyle(): Font {
-    return Font("fa-thin", "fa-thin-100", FontWeight.Normal, FontStyle.Normal)
+    return Font("fa_thin", "fa_thin_100", FontWeight.Normal, FontStyle.Normal)
 }

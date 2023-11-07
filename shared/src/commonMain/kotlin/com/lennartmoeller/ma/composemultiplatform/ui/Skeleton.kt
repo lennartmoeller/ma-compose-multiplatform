@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -39,14 +36,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lennartmoeller.ma.composemultiplatform.utility.NavigablePage
 
 @Composable
-fun Skeleton(navigationItems: List<NavigationItem>) {
-    val skeletonState = remember { SkeletonState(navigationItems) }
+fun Skeleton(pages: List<NavigablePage>) {
+    val skeletonState = remember { SkeletonState(pages) }
     skeletonState.RenderSkeleton()
 }
 
-class SkeletonState(private val navigationItems: List<NavigationItem>) {
+class SkeletonState(private val pages: List<NavigablePage>) {
 
     companion object {
         private const val NAV_ITEM_UNSELECTED_OPACITY = 0.55F
@@ -74,14 +72,14 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
     private fun RenderThinDevice() {
         Scaffold(
             topBar = {
-                Header(leading = { MenuButton() })
+                Header(menuButton = true)
             },
             bottomBar = {
                 NavigationBar {
-                    navigationItems.mapIndexed { index, navigationItem ->
+                    pages.mapIndexed { index, page ->
                         val isSelected: Boolean = currentPageIndex == index
                         NavigationBarItem(
-                            icon = { NavigationIcon(navigationItem, isSelected) },
+                            icon = { NavigationIcon(page, isSelected) },
                             onClick = { currentPageIndex = index },
                             selected = isSelected,
                         )
@@ -95,15 +93,18 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                         .fillMaxWidth()
                         .padding(innerPadding)
                 ) {
-                    navigationItems[currentPageIndex].page()
+                    pages[currentPageIndex].build()
                 }
-            }
+            },
+            floatingActionButton = { pages[currentPageIndex].floatingActionButton?.invoke() }
         )
     }
 
     @Composable
     private fun RenderMediumDevice() {
-        Scaffold {
+        Scaffold(
+            floatingActionButton = { pages[currentPageIndex].floatingActionButton?.invoke() }
+        ) {
             Row {
                 NavigationRail(
                     // set the elevation to match the NavigationBar elevation
@@ -115,10 +116,10 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                         ) { MenuButton() }
                     },
                     content = {
-                        navigationItems.mapIndexed { index, navigationItem ->
+                        pages.mapIndexed { index, page ->
                             val isSelected: Boolean = currentPageIndex == index
                             NavigationRailItem(
-                                icon = { NavigationIcon(navigationItem, isSelected) },
+                                icon = { NavigationIcon(page, isSelected) },
                                 onClick = { currentPageIndex = index },
                                 selected = isSelected
                             )
@@ -132,7 +133,7 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                 ) {
                     Header()
                     Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        navigationItems[currentPageIndex].page()
+                        pages[currentPageIndex].build()
                     }
                 }
             }
@@ -141,7 +142,9 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
 
     @Composable
     private fun RenderWideDevice() {
-        Scaffold {
+        Scaffold(
+            floatingActionButton = { pages[currentPageIndex].floatingActionButton?.invoke() }
+        ) {
             PermanentNavigationDrawer(
                 drawerContent = {
                     Column(
@@ -154,20 +157,20 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(HEADER_HEIGHT)
-                                .padding(start = 20.dp)
+                                .padding(start = 28.dp)
                         ) { MenuButton() }
                         PermanentDrawerSheet(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             drawerTonalElevation = 3.0.dp
                         ) {
-                            navigationItems.mapIndexed { index, navigationItem ->
+                            pages.mapIndexed { index, page ->
                                 val isSelected: Boolean = currentPageIndex == index
                                 NavigationDrawerItem(
                                     modifier = Modifier.height(46.dp),
                                     shape = MaterialTheme.shapes.medium,
                                     label = {
                                         Text(
-                                            navigationItem.label,
+                                            page.title,
                                             style = MaterialTheme.typography.bodyMedium.copy(
                                                 fontWeight = FontWeight.W500,
                                                 fontSize = 13.sp,
@@ -176,11 +179,11 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                                             modifier = Modifier.alpha(if (!isSelected) NAV_ITEM_UNSELECTED_OPACITY else 1F)
                                         )
                                     },
-                                    icon = { NavigationIcon(navigationItem, isSelected) },
+                                    icon = { NavigationIcon(page, isSelected) },
                                     onClick = { currentPageIndex = index },
                                     selected = isSelected
                                 )
-                                if (index < navigationItems.size - 1) {
+                                if (index < pages.size - 1) {
                                     Spacer(modifier = Modifier.height(6.dp))
                                 }
                             }
@@ -199,7 +202,7 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(horizontal = 16.dp)
                         ) {
-                            navigationItems[currentPageIndex].page()
+                            pages[currentPageIndex].build()
                         }
                     }
                 }
@@ -212,59 +215,53 @@ class SkeletonState(private val navigationItems: List<NavigationItem>) {
         IconButton(
             onClick = { println("TODO: Implement") } // TODO: Implement
         ) {
-            Icon(imageVector = Icons.Filled.Menu, contentDescription = "Einstellungen")
+            FontAwesomeIcon(unicode = "\uf0c9")
         }
     }
 
     @Composable
-    private fun NavigationIcon(navigationItem: NavigationItem, isSelected: Boolean) {
+    private fun NavigationIcon(page: NavigablePage, isSelected: Boolean) {
         FontAwesomeIcon(
-            name = navigationItem.icon,
+            unicode = page.iconUnicode,
             style = if (isSelected) SolidStyle() else RegularStyle(),
             opacity = if (isSelected) .9f else NAV_ITEM_UNSELECTED_OPACITY,
         )
     }
 
     @Composable
-    private fun Header(
-        leading: @Composable (() -> Unit)? = null,
-        title: String? = navigationItems[currentPageIndex].label,
-        subtitle: String? = null,
-        trailing: @Composable (() -> Unit)? = null,
-    ) {
+    private fun Header(menuButton: Boolean = false) {
         val padding = (HEADER_HEIGHT - 52.dp) / 4
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
                 .fillMaxWidth()
                 .height(HEADER_HEIGHT)
-                .padding(padding)
+                .padding(horizontal = padding * 2)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(padding)
             ) {
-                if (leading != null) {
-                    Box { leading.invoke() }
-                }
+                if (menuButton) MenuButton()
+                pages[currentPageIndex].headerLeading.forEach { it() }
                 Column(
                     verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
                 ) {
-                    if (title != null) {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(start = padding)
-                        )
-                    }
-                    if (subtitle != null) {
+                    Text(
+                        text = pages[currentPageIndex].title,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    pages[currentPageIndex].subtitle?.let { subtitle ->
                         Text(
                             text = subtitle,
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
                         )
                     }
                 }
-                trailing?.invoke()
+                pages[currentPageIndex].headerTrailing.forEach { it() }
             }
         }
     }

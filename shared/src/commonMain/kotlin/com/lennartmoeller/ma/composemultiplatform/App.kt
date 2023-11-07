@@ -6,7 +6,6 @@ import com.lennartmoeller.ma.composemultiplatform.entities.Data
 import com.lennartmoeller.ma.composemultiplatform.pages.AccountsPage
 import com.lennartmoeller.ma.composemultiplatform.pages.CategoriesPage
 import com.lennartmoeller.ma.composemultiplatform.pages.TransactionsPage
-import com.lennartmoeller.ma.composemultiplatform.ui.NavigationItem
 import com.lennartmoeller.ma.composemultiplatform.ui.Skeleton
 import com.lennartmoeller.ma.composemultiplatform.ui.theme.AppTheme
 import com.lennartmoeller.ma.composemultiplatform.utility.HttpHelper
@@ -24,21 +23,10 @@ fun App() {
         useDarkTheme = false // TODO: Remove after debugging
     ) {
         Skeleton(
-            navigationItems = listOf(
-                NavigationItem(
-                    page = { TransactionsPage() },
-                    icon = "money-bills",
-                    label = "Transaktionen"
-                ),
-                NavigationItem(
-                    page = { CategoriesPage() },
-                    icon = "icons",
-                    label = "Kategorien"
-                ), NavigationItem(
-                    page = { AccountsPage() },
-                    icon = "building-columns",
-                    label = "Konten"
-                )
+            pages = listOf(
+                TransactionsPage(),
+                CategoriesPage(),
+                AccountsPage(),
             )
         )
     }

@@ -6,6 +6,8 @@ plugins {
     kotlin("plugin.serialization") version "1.9.0"
 }
 
+val version = block@{ dep: String -> project.properties["${dep}.version"].toString() }
+
 kotlin {
     androidTarget()
 
@@ -31,11 +33,11 @@ kotlin {
                 implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("io.ktor:ktor-client-core:2.3.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-                implementation("app.cash.sqldelight:primitive-adapters:2.0.0")
-                implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+                implementation("io.ktor:ktor-client-core:${version("ktor")}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${version("kotlinx-serialization-json")}")
+                implementation("app.cash.sqldelight:primitive-adapters:${version("sqldelight")}")
+                implementation("app.cash.sqldelight:coroutines-extensions:${version("sqldelight")}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${version("kotlinx-datetime")}")
             }
         }
         val androidMain by getting {
@@ -43,8 +45,8 @@ kotlin {
                 api("androidx.activity:activity-compose:1.8.0")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.12.0")
-                implementation("io.ktor:ktor-client-android:2.3.5")
-                implementation("app.cash.sqldelight:android-driver:2.0.0")
+                implementation("io.ktor:ktor-client-android:${version("ktor")}")
+                implementation("app.cash.sqldelight:android-driver:${version("sqldelight")}")
             }
         }
         val iosX64Main by getting
@@ -56,15 +58,15 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.5")
-                implementation("app.cash.sqldelight:native-driver:2.0.0")
+                implementation("io.ktor:ktor-client-darwin:${version("ktor")}")
+                implementation("app.cash.sqldelight:native-driver:${version("sqldelight")}")
             }
         }
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
-                implementation("io.ktor:ktor-client-apache5:2.3.5")
-                implementation("app.cash.sqldelight:sqlite-driver:2.0.0")
+                implementation("io.ktor:ktor-client-apache5:${version("ktor")}")
+                implementation("app.cash.sqldelight:sqlite-driver:${version("sqldelight")}")
             }
         }
     }
@@ -75,8 +77,7 @@ android {
     namespace = "com.lennartmoeller.ma.composemultiplatform"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
 
     defaultConfig {
         minSdk = (findProperty("android.minSdk") as String).toInt()
