@@ -7,10 +7,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
-import com.lennartmoeller.ma.composemultiplatform.ui.Divider
-import com.lennartmoeller.ma.composemultiplatform.ui.FontAwesomeIcon
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
 import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
-import com.lennartmoeller.ma.composemultiplatform.utility.NavigablePage
+import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
 
 class CategoriesPage : NavigablePage() {
     override val title: String = "Kategorien"
@@ -25,10 +25,10 @@ class CategoriesPage : NavigablePage() {
                 val category: Category = categories[index]
                 ListItem(
                     headlineContent = { Text(category.label) },
-                    leadingContent = { FontAwesomeIcon(name = category.icon) }
+                    leadingContent = { CustomIcon(name = category.icon) }
                 )
                 // divider between items
-                if (index < categories.size - 1) Divider(1)
+                if (index < categories.size - 1) CustomDivider(1)
             }
         }
     }

@@ -8,7 +8,7 @@ import com.lennartmoeller.ma.composemultiplatform.pages.CategoriesPage
 import com.lennartmoeller.ma.composemultiplatform.pages.TransactionsPage
 import com.lennartmoeller.ma.composemultiplatform.ui.Skeleton
 import com.lennartmoeller.ma.composemultiplatform.ui.theme.AppTheme
-import com.lennartmoeller.ma.composemultiplatform.utility.HttpHelper
+import com.lennartmoeller.ma.composemultiplatform.util.HttpHelper
 import kotlinx.coroutines.runBlocking
 
 @Composable

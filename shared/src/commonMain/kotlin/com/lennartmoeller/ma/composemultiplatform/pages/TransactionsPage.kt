@@ -18,12 +18,12 @@ import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
 import com.lennartmoeller.ma.composemultiplatform.entities.Transaction
-import com.lennartmoeller.ma.composemultiplatform.ui.Divider
-import com.lennartmoeller.ma.composemultiplatform.ui.FontAwesomeIcon
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
 import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
-import com.lennartmoeller.ma.composemultiplatform.utility.GermanDate
-import com.lennartmoeller.ma.composemultiplatform.utility.Money
-import com.lennartmoeller.ma.composemultiplatform.utility.NavigablePage
+import com.lennartmoeller.ma.composemultiplatform.util.GermanDate
+import com.lennartmoeller.ma.composemultiplatform.util.Money
+import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
 
 class TransactionsPage : NavigablePage() {
     override val title: String = "Transaktionen"
@@ -48,7 +48,7 @@ class TransactionsPage : NavigablePage() {
                             text = GermanDate(date).beautifyDate()
                         )
                     }
-                    Divider()
+                    CustomDivider()
                 }
                 items(count = transactions.size) { index ->
                     val account: Account = accounts[transactions[index].account]!!
@@ -56,7 +56,7 @@ class TransactionsPage : NavigablePage() {
                     val transaction: Transaction = transactions[index]
                     ListItem(
                         headlineContent = { Text(category.label) },
-                        leadingContent = { FontAwesomeIcon(name = category.icon) },
+                        leadingContent = { CustomIcon(name = category.icon) },
                         supportingContent = {
                             transaction.description?.let {
                                 if (it.isNotBlank()) Text(it)
@@ -70,7 +70,7 @@ class TransactionsPage : NavigablePage() {
                         },
                     )
                     // divider if not last item
-                    if (index < transactions.size - 1) Divider(1)
+                    if (index < transactions.size - 1) CustomDivider(1)
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.utility
+package com.lennartmoeller.ma.composemultiplatform.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek

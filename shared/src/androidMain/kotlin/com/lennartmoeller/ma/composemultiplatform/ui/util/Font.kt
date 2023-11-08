@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.utility
+package com.lennartmoeller.ma.composemultiplatform.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.ui
+package com.lennartmoeller.ma.composemultiplatform.ui.custom
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lennartmoeller.ma.composemultiplatform.database.Database
-import com.lennartmoeller.ma.composemultiplatform.utility.Font
+import com.lennartmoeller.ma.composemultiplatform.ui.util.Font
 
 @Composable
-fun FontAwesomeIcon(
+fun CustomIcon(
     unicode: String? = null,
     name: String? = null,
     style: Font = SolidStyle(),

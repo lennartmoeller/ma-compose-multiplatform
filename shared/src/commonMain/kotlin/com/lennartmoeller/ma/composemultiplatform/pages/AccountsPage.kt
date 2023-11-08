@@ -21,21 +21,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
-import com.lennartmoeller.ma.composemultiplatform.ui.Divider
-import com.lennartmoeller.ma.composemultiplatform.ui.EditDialog
-import com.lennartmoeller.ma.composemultiplatform.ui.EditDialogState
-import com.lennartmoeller.ma.composemultiplatform.ui.FontAwesomeIcon
-import com.lennartmoeller.ma.composemultiplatform.ui.RegularStyle
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDialog
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDialogState
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
-import com.lennartmoeller.ma.composemultiplatform.utility.NavigablePage
-import com.lennartmoeller.ma.composemultiplatform.utility.ScreenWidthBreakpoint
+import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
+import com.lennartmoeller.ma.composemultiplatform.ui.util.ScreenWidthBreakpoint
 
 class AccountsPage : NavigablePage() {
     override val title: String = "Konten"
     override val iconUnicode: String = "\uf19c"
     override val floatingActionButton: @Composable () -> Unit = {
         ScreenWidthBreakpoint(
-            width = EditDialogState.maxDialogContainerWidth,
+            width = CustomDialogState.maxDialogContainerWidth,
             smallDeviceContent = {
                 FloatingActionButton(
                     onClick = {
@@ -47,7 +47,7 @@ class AccountsPage : NavigablePage() {
                         modifier = Modifier.padding(start = 8.dp, end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        FontAwesomeIcon(
+                        CustomIcon(
                             unicode = "2b",
                             size = 18.sp,
                             style = RegularStyle(),
@@ -61,7 +61,7 @@ class AccountsPage : NavigablePage() {
     }
     override val headerTrailing: List<@Composable () -> Unit> = listOf({
         ScreenWidthBreakpoint(
-            width = EditDialogState.maxDialogContainerWidth,
+            width = CustomDialogState.maxDialogContainerWidth,
             largeDeviceContent = {
                 TextButton(onClick = {
                     dialogItem = null
@@ -71,7 +71,7 @@ class AccountsPage : NavigablePage() {
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        FontAwesomeIcon(
+                        CustomIcon(
                             unicode = "2b",
                             size = 14.sp,
                             style = RegularStyle(),
@@ -94,14 +94,14 @@ class AccountsPage : NavigablePage() {
                 val account: Account = accounts[index]
                 ListItem(
                     headlineContent = { Text(account.label) },
-                    leadingContent = { FontAwesomeIcon(name = account.icon) },
+                    leadingContent = { CustomIcon(name = account.icon) },
                     modifier = Modifier.clickable(onClick = {
                         dialogItem = account
                         dialogOpen = true
                     })
                 )
                 // divider if not last item
-                if (index < accounts.size - 1) Divider(1)
+                if (index < accounts.size - 1) CustomDivider(1)
             }
         }
         if (dialogOpen) {
@@ -111,10 +111,10 @@ class AccountsPage : NavigablePage() {
 
     @Composable
     fun BuildDialog() {
-        EditDialog(
+        CustomDialog(
             onClose = { closeDialog() },
             onSave = { saveElement() },
-            dialogTitle = "Konto " + if (dialogItem == null) "erstellen" else "bearbeiten"
+            title = "Konto " + if (dialogItem == null) "erstellen" else "bearbeiten"
         ) {
 
         }

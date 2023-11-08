@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.utility
+package com.lennartmoeller.ma.composemultiplatform.util
 
 class Utility {
     companion object {

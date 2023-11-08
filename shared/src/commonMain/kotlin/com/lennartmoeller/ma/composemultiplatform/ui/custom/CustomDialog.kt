@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.ui
+package com.lennartmoeller.ma.composemultiplatform.ui.custom
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseOut
@@ -34,21 +34,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.lennartmoeller.ma.composemultiplatform.utility.ScreenWidthBreakpoint
+import com.lennartmoeller.ma.composemultiplatform.ui.util.ScreenWidthBreakpoint
 import kotlinx.coroutines.launch
 
 @Composable
-fun EditDialog(
+fun CustomDialog(
     onClose: () -> Unit,
     onSave: () -> Unit,
-    dialogTitle: String,
-    dialogContent: @Composable () -> Unit,
+    title: String,
+    content: @Composable () -> Unit,
 ) {
-    val dialogState = remember { EditDialogState(onClose, onSave, dialogTitle, dialogContent) }
+    val dialogState = remember { CustomDialogState(onClose, onSave, title, content) }
     dialogState.RenderDialog()
 }
 
-class EditDialogState(
+class CustomDialogState(
     private val onClose: () -> Unit,
     private val onSave: () -> Unit,
     private val dialogTitle: String,
@@ -118,7 +118,7 @@ class EditDialogState(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(onClick = onClose) {
-                        FontAwesomeIcon(
+                        CustomIcon(
                             unicode = "\uf00d",
                             style = RegularStyle(),
                             size = 22.sp,

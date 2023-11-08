@@ -37,7 +37,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lennartmoeller.ma.composemultiplatform.utility.NavigablePage
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.RegularStyle
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.SolidStyle
+import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
 
 @Composable
 fun Skeleton(pages: List<NavigablePage>) {
@@ -216,13 +219,13 @@ class SkeletonState(private val pages: List<NavigablePage>) {
         IconButton(
             onClick = { println("TODO: Implement") } // TODO: Implement
         ) {
-            FontAwesomeIcon(unicode = "\uf0c9")
+            CustomIcon(unicode = "\uf0c9")
         }
     }
 
     @Composable
     private fun NavigationIcon(page: NavigablePage, isSelected: Boolean) {
-        FontAwesomeIcon(
+        CustomIcon(
             unicode = page.iconUnicode,
             style = if (isSelected) SolidStyle() else RegularStyle(),
             opacity = if (isSelected) .9f else NAV_ITEM_UNSELECTED_OPACITY,

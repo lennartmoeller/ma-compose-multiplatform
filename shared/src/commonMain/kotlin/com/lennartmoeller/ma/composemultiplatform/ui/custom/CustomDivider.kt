@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.ui
+package com.lennartmoeller.ma.composemultiplatform.ui.custom
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Divider(level: Int = 0) {
+fun CustomDivider(level: Int = 0) {
     if (level == 0) {
         Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
     } else {
