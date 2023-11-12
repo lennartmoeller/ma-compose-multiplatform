@@ -36,17 +36,17 @@ SELECT transactions.*
 FROM transactions;
 
 insertAccount:
-INSERT INTO accounts(id, label, start_balance, icon)
+INSERT OR REPLACE INTO accounts(id, label, start_balance, icon)
 VALUES(?, ?, ?, ?);
 
 insertCategory:
-INSERT INTO categories(id, label, type, icon)
+INSERT OR REPLACE INTO categories(id, label, type, icon)
 VALUES(?, ?, ?, ?);
 
 insertIcon:
-INSERT INTO icons(name, unicode)
+INSERT OR REPLACE INTO icons(name, unicode)
 VALUES(?, ?);
 
 insertTransaction:
-INSERT INTO transactions(id, date, account, category, description, amount)
+INSERT OR REPLACE INTO transactions(id, date, account, category, description, amount)
 VALUES(?, ?, ?, ?, ?, ?);

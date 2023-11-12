@@ -18,11 +18,11 @@ import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
 import com.lennartmoeller.ma.composemultiplatform.entities.Category
 import com.lennartmoeller.ma.composemultiplatform.entities.Transaction
+import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
-import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
+import com.lennartmoeller.ma.composemultiplatform.util.Euro
 import com.lennartmoeller.ma.composemultiplatform.util.GermanDate
-import com.lennartmoeller.ma.composemultiplatform.util.Money
 import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
 
 class TransactionsPage : NavigablePage() {
@@ -65,7 +65,7 @@ class TransactionsPage : NavigablePage() {
                         trailingContent = {
                             Column(horizontalAlignment = Alignment.End) {
                                 Text(text = account.label)
-                                Text(text = Money.formatCents(transaction.amount))
+                                Text(text = Euro.toStr(transaction.amount))
                             }
                         },
                     )

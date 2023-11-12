@@ -1,90 +1,54 @@
 package com.lennartmoeller.ma.composemultiplatform.pages
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
-import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDialog
-import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDialogState
+import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
-import com.lennartmoeller.ma.composemultiplatform.ui.custom.RegularStyle
-import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
-import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
+import com.lennartmoeller.ma.composemultiplatform.ui.form.CreateElementFloatingActionButton
+import com.lennartmoeller.ma.composemultiplatform.ui.form.CreateElementTextButton
+import com.lennartmoeller.ma.composemultiplatform.ui.form.CustomDialog
+import com.lennartmoeller.ma.composemultiplatform.ui.form.Form
+import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.EuroFormInput
+import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.IconFormInput
+import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.TextFormInput
 import com.lennartmoeller.ma.composemultiplatform.ui.util.ScreenWidthBreakpoint
+import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
 
 class AccountsPage : NavigablePage() {
     override val title: String = "Konten"
     override val iconUnicode: String = "\uf19c"
     override val floatingActionButton: @Composable () -> Unit = {
         ScreenWidthBreakpoint(
-            width = CustomDialogState.maxDialogContainerWidth,
+            width = CustomDialog.maxDialogContainerWidth,
             smallDeviceContent = {
-                FloatingActionButton(
-                    onClick = {
-                        dialogItem = null
-                        dialogOpen = true
-                    },
-                ) {
-                    Row(
-                        modifier = Modifier.padding(start = 8.dp, end = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CustomIcon(
-                            unicode = "2b",
-                            size = 18.sp,
-                            style = RegularStyle(),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                        Text(text = "Hinzufügen")
-                    }
-                }
+                CreateElementFloatingActionButton(onClick = { dialog.open() })
             },
         )
     }
     override val headerTrailing: List<@Composable () -> Unit> = listOf({
         ScreenWidthBreakpoint(
-            width = CustomDialogState.maxDialogContainerWidth,
+            width = CustomDialog.maxDialogContainerWidth,
             largeDeviceContent = {
-                TextButton(onClick = {
-                    dialogItem = null
-                    dialogOpen = true
-                }) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CustomIcon(
-                            unicode = "2b",
-                            size = 14.sp,
-                            style = RegularStyle(),
-                        )
-                        Text("Hinzufügen")
-                    }
-                }
+                CreateElementTextButton(onClick = { dialog.open() })
             }
         )
     })
 
-    private var dialogOpen by mutableStateOf(false)
-    private var dialogItem by mutableStateOf<Account?>(null)
+    private var dialogAccount by mutableStateOf<Account?>(null)
+    private var dialog: CustomDialog = CustomDialog()
+    private var form = Form()
 
     @Composable
     override fun build() {
@@ -96,37 +60,58 @@ class AccountsPage : NavigablePage() {
                     headlineContent = { Text(account.label) },
                     leadingContent = { CustomIcon(name = account.icon) },
                     modifier = Modifier.clickable(onClick = {
-                        dialogItem = account
-                        dialogOpen = true
+                        dialog.open(); dialogAccount = account
                     })
                 )
                 // divider if not last item
                 if (index < accounts.size - 1) CustomDivider(1)
             }
         }
-        if (dialogOpen) {
-            BuildDialog()
+        dialog.build(
+            onClose = {
+                dialog.close()
+                dialogAccount = null
+            },
+            onSave = { saveAccount() },
+            title = "Konto " + if (dialogAccount == null) "erstellen" else "bearbeiten",
+            content = {
+                Column {
+                    TextFormInput(
+                        form = form,
+                        id = "label",
+                        initial = dialogAccount?.label ?: "",
+                        label = "Bezeichnung",
+                        required = true,
+                    )
+                    EuroFormInput(
+                        form = form,
+                        id = "start_balance",
+                        initial = dialogAccount?.startBalance ?: 0,
+                        label = "Startbetrag",
+                    )
+                    IconFormInput(
+                        form = form,
+                        id = "icon",
+                        initial = dialogAccount?.icon ?: "",
+                        label = "Icon-Name",
+                    )
+                }
+            }
+        )
+    }
+
+    private fun saveAccount() {
+        if (form.hasErrors()) return
+        val values: MutableMap<String, Any> = form.getValues()
+        // TODO: Make API request, get ID...
+        if (dialogAccount == null) {
+            dialogAccount = Account.fromMap(values + ("id" to 100))
+        } else {
+            dialogAccount!!.updateFromMap(values)
         }
-    }
-
-    @Composable
-    fun BuildDialog() {
-        CustomDialog(
-            onClose = { closeDialog() },
-            onSave = { saveElement() },
-            title = "Konto " + if (dialogItem == null) "erstellen" else "bearbeiten"
-        ) {
-
-        }
-    }
-
-    private fun closeDialog() {
-        dialogOpen = false
-        dialogItem = null
-    }
-
-    private fun saveElement() {
-        closeDialog()
+        Database.insertAccount(dialogAccount!!)
+        dialog.close()
+        dialogAccount = null
     }
 
 }

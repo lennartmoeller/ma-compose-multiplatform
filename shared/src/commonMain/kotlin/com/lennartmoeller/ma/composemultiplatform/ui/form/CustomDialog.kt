@@ -1,4 +1,4 @@
-package com.lennartmoeller.ma.composemultiplatform.ui.custom
+package com.lennartmoeller.ma.composemultiplatform.ui.form
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseOut
@@ -23,8 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,76 +36,85 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma.composemultiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma.composemultiplatform.ui.util.ScreenWidthBreakpoint
 import kotlinx.coroutines.launch
 
-@Composable
-fun CustomDialog(
-    onClose: () -> Unit,
-    onSave: () -> Unit,
-    title: String,
-    content: @Composable () -> Unit,
-) {
-    val dialogState = remember { CustomDialogState(onClose, onSave, title, content) }
-    dialogState.RenderDialog()
-}
-
-class CustomDialogState(
-    private val onClose: () -> Unit,
-    private val onSave: () -> Unit,
-    private val dialogTitle: String,
-    private val dialogContent: @Composable () -> Unit,
-) {
+class CustomDialog {
     companion object {
         val maxDialogContainerWidth: Dp = 560.dp
     }
 
+    private var active by mutableStateOf(false)
+    private lateinit var onClose: () -> Unit
+    private lateinit var onSave: () -> Unit
+    private lateinit var title: String
+
+    fun open() {
+        active = true
+    }
+
+    fun close() {
+        active = false
+    }
+
     @Composable
-    fun RenderDialog() {
-        val animationDuration = 200
-        val animateTrigger = remember { mutableStateOf(false) }
-        LaunchedEffect(key1 = Unit) {
-            launch {
-                animateTrigger.value = true
-            }
-        }
-        Dialog(
-            onDismissRequest = onClose,
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            ScreenWidthBreakpoint(
-                maxDialogContainerWidth,
-                smallDeviceContent = {
-                    AnimatedVisibility(
-                        visible = animateTrigger.value,
-                        enter = slideIn(
-                            animationSpec = tween(animationDuration, easing = EaseOut)
-                        ) {
-                            IntOffset(0, it.height)
-                        } + fadeIn(
-                            animationSpec = tween(animationDuration)
-                        ),
-                        content = { ThinDeviceDialogContent() }
-                    )
-                },
-                largeDeviceContent = {
-                    AnimatedVisibility(
-                        visible = animateTrigger.value,
-                        enter = scaleIn(
-                            animationSpec = tween(animationDuration, easing = EaseOut),
-                            initialScale = .9f,
-                        ) + fadeIn(
-                            animationSpec = tween(animationDuration)
-                        ),
-                        content = { WideDeviceDialogContent() }
-                    )
+    fun build(
+        onClose: () -> Unit,
+        onSave: () -> Unit,
+        title: String,
+        content: @Composable () -> Unit,
+    ) {
+        this.onClose = onClose
+        this.onSave = onSave
+        this.title = title
+        if (active) {
+            val animationDuration = 200
+            val animateTrigger = remember { mutableStateOf(false) }
+            LaunchedEffect(key1 = Unit) {
+                launch {
+                    animateTrigger.value = true
                 }
-            )
+            }
+            Dialog(
+                onDismissRequest = onClose,
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                ScreenWidthBreakpoint(
+                    maxDialogContainerWidth,
+                    smallDeviceContent = {
+                        AnimatedVisibility(
+                            visible = animateTrigger.value,
+                            enter = slideIn(
+                                animationSpec = tween(animationDuration, easing = EaseOut)
+                            ) {
+                                IntOffset(0, it.height)
+                            } + fadeIn(
+                                animationSpec = tween(animationDuration)
+                            ),
+                            content = { ThinDeviceDialogContent(content) }
+                        )
+                    },
+                    largeDeviceContent = {
+                        AnimatedVisibility(
+                            visible = animateTrigger.value,
+                            enter = scaleIn(
+                                animationSpec = tween(animationDuration, easing = EaseOut),
+                                initialScale = .9f,
+                            ) + fadeIn(
+                                animationSpec = tween(animationDuration)
+                            ),
+                            content = { WideDeviceDialogContent(content) }
+                        )
+                    }
+                )
+            }
         }
     }
 
     @Composable
-    fun ThinDeviceDialogContent() {
+    fun ThinDeviceDialogContent(content: @Composable () -> Unit) {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
@@ -125,7 +136,7 @@ class CustomDialogState(
                         )
                     }
                     Text(
-                        dialogTitle,
+                        title,
                         modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.titleLarge
                     )
@@ -133,12 +144,13 @@ class CustomDialogState(
                         Text("Speichern")
                     }
                 }
+                content()
             }
         }
     }
 
     @Composable
-    fun WideDeviceDialogContent() {
+    fun WideDeviceDialogContent(content: @Composable () -> Unit) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(24.dp))
@@ -148,11 +160,11 @@ class CustomDialogState(
         ) {
             Column {
                 Text(
-                    dialogTitle,
+                    title,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Box(modifier = Modifier.padding(top = 16.dp)) {
-                    dialogContent()
+                    content()
                 }
                 Row(
                     modifier = Modifier
@@ -174,5 +186,4 @@ class CustomDialogState(
             }
         }
     }
-
 }
