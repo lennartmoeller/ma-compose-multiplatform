@@ -9,10 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.lennartmoeller.ma.composemultiplatform.database.Database
 import com.lennartmoeller.ma.composemultiplatform.entities.Account
+import com.lennartmoeller.ma.composemultiplatform.entities.PutResponse
 import com.lennartmoeller.ma.composemultiplatform.ui.SkeletonState
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma.composemultiplatform.ui.custom.CustomIcon
@@ -24,7 +26,9 @@ import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.EuroFormInput
 import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.IconFormInput
 import com.lennartmoeller.ma.composemultiplatform.ui.form.inputs.TextFormInput
 import com.lennartmoeller.ma.composemultiplatform.ui.util.ScreenWidthBreakpoint
+import com.lennartmoeller.ma.composemultiplatform.util.HttpHelper
 import com.lennartmoeller.ma.composemultiplatform.util.NavigablePage
+import kotlinx.coroutines.launch
 
 class AccountsPage : NavigablePage() {
     override val title: String = "Konten"
@@ -53,6 +57,7 @@ class AccountsPage : NavigablePage() {
     @Composable
     override fun build() {
         val accounts: List<Account> = Database.getAccounts().values.toList().sortedBy { it.label }
+        val coroutineScope = rememberCoroutineScope()
         LazyColumn(contentPadding = PaddingValues(bottom = SkeletonState.PAGE_BOTTOM_PADDING)) {
             items(count = accounts.size) { index ->
                 val account: Account = accounts[index]
@@ -72,7 +77,7 @@ class AccountsPage : NavigablePage() {
                 dialog.close()
                 dialogAccount = null
             },
-            onSave = { saveAccount() },
+            onSave = { coroutineScope.launch { saveAccount() } },
             title = "Konto " + if (dialogAccount == null) "erstellen" else "bearbeiten",
             content = {
                 Column {
@@ -100,14 +105,17 @@ class AccountsPage : NavigablePage() {
         )
     }
 
-    private fun saveAccount() {
+    private suspend fun saveAccount() {
         if (form.hasErrors()) return
         val values: MutableMap<String, Any> = form.getValues()
-        // TODO: Make API request, get ID...
         if (dialogAccount == null) {
-            dialogAccount = Account.fromMap(values + ("id" to 100))
+            dialogAccount = Account.fromMap(values)
         } else {
             dialogAccount!!.updateFromMap(values)
+        }
+        val response: PutResponse = HttpHelper.put("account", dialogAccount)
+        if (dialogAccount!!.id == 0) {
+            dialogAccount!!.id = response.id
         }
         Database.insertAccount(dialogAccount!!)
         dialog.close()
