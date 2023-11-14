@@ -5,18 +5,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Category(
-    @SerialName("id") var id: Int,
+    @SerialName("id") var id: Int = 0,
     @SerialName("label") var label: String,
     @SerialName("type") var type: Int,
-    @SerialName("icon") var icon: String?,
+    @SerialName("icon") var icon: String? = null,
 ) {
     companion object {
         fun fromMap(map: Map<String, Any>): Category {
             return Category(
-                id = map["id"] as Int,
+                id = map["id"] as? Int ?: 0,
                 label = map["label"] as String,
                 type = map["type"] as Int,
-                icon = map["icon"] as String
+                icon = map["icon"] as String?,
             )
         }
     }
@@ -25,6 +25,6 @@ data class Category(
         map["id"]?.let { id = it as Int }
         map["label"]?.let { label = it as String }
         map["type"]?.let { type = it as Int }
-        map["icon"]?.let { icon = it as String }
+        map["icon"]?.let { icon = it as String? }
     }
 }
