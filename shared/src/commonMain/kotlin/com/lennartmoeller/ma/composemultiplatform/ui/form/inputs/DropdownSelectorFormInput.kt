@@ -22,16 +22,20 @@ import com.lennartmoeller.ma.composemultiplatform.ui.form.Form
 fun <T : Any> DropdownSelectorFormInput(
     form: Form,
     id: String,
-    initial: T,
+    initial: T?,
     label: String,
     iconUnicode: String,
     options: Map<T, String>,
+    onValueChange: ((value: T?) -> Unit)? = null,
     required: Boolean = false,
 ) {
-    var value: T by rememberSaveable { mutableStateOf(initial) }
-    var text: String by rememberSaveable { mutableStateOf(options[initial]!!) }
+    var value: T? by rememberSaveable { mutableStateOf(initial) }
+    var text: String by rememberSaveable { mutableStateOf(options[initial] ?: "") }
+    var errorMessage: String? by rememberSaveable { mutableStateOf(null) }
+    val getErrorMessage: () -> String? =
+        { if (required && text.isEmpty()) "Dieses Feld ist erforderlich" else null }
     var expanded by rememberSaveable { mutableStateOf(false) }
-    form.setFormInputFeedback(id, value, false)
+    form.setFormInputFeedback(id, value, getErrorMessage() != null)
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
@@ -58,7 +62,12 @@ fun <T : Any> DropdownSelectorFormInput(
                         value = itemValue
                         text = itemText
                         expanded = false
-                        form.setFormInputFeedback(id, value, false)
+                        errorMessage = getErrorMessage()
+                        form.setFormInputFeedback(id, value.toString(), errorMessage != null)
+                        // call on value change
+                        if (errorMessage == null && onValueChange != null) {
+                            onValueChange(value)
+                        }
                     },
                     text = { Text(text = itemText) }
                 )

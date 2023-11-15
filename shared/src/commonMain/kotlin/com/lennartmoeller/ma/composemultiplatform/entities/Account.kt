@@ -11,7 +11,7 @@ data class Account(
     @SerialName("icon") var icon: String? = null,
 ) {
     companion object {
-        fun fromMap(map: Map<String, Any>): Account {
+        fun fromMap(map: Map<String, Any?>): Account {
             return Account(
                 id = map["id"] as? Int ?: 0,
                 label = map["label"] as String,
@@ -21,7 +21,7 @@ data class Account(
         }
     }
 
-    fun updateFromMap(map: Map<String, Any>) {
+    fun updateFromMap(map: Map<String, Any?>) {
         map["id"]?.let { id = it as Int }
         map["label"]?.let { label = it as String }
         map["start_balance"]?.let { startBalance = it as Int }

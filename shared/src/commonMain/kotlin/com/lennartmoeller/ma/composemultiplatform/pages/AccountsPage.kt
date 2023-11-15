@@ -107,7 +107,7 @@ class AccountsPage : NavigablePage() {
 
     private suspend fun saveAccount() {
         if (form.hasErrors()) return
-        val values: MutableMap<String, Any> = form.getValues()
+        val values: MutableMap<String, Any?> = form.getValues()
         if (dialogAccount == null) {
             dialogAccount = Account.fromMap(values)
         } else {

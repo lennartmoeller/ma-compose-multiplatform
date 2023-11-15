@@ -110,7 +110,7 @@ class CategoriesPage : NavigablePage() {
 
     private suspend fun saveCategory() {
         if (form.hasErrors()) return
-        val values: MutableMap<String, Any> = form.getValues()
+        val values: MutableMap<String, Any?> = form.getValues()
         if (dialogCategory == null) {
             dialogCategory = Category.fromMap(values)
         } else {

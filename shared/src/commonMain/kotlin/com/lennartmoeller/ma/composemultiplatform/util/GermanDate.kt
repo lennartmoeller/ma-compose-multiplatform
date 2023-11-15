@@ -2,8 +2,10 @@ package com.lennartmoeller.ma.composemultiplatform.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 
 class GermanDate {
@@ -15,6 +17,12 @@ class GermanDate {
             throw IllegalArgumentException("Invalid date format. Expected 'YYYY-MM-DD'.")
         }
         localDate = LocalDate.parse(date)
+    }
+
+    constructor(epochMilliseconds: Long) {
+        localDate = Instant.fromEpochSeconds(epochMilliseconds / 1000)
+            .toLocalDateTime(TimeZone.UTC)
+            .date
     }
 
     constructor() {
@@ -48,6 +56,14 @@ class GermanDate {
             DayOfWeek.FRIDAY -> "Freitag"
             else -> "Samstag"
         }
+    }
+
+    fun toEpochMillis(): Long {
+        return localDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+    }
+
+    override fun toString(): String {
+        return localDate.toString()
     }
 
     fun beautifyDate(
