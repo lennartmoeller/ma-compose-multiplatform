@@ -27,6 +27,7 @@ import com.lennartmoeller.ma_compose_multiplatform.entities.Transaction
 import com.lennartmoeller.ma_compose_multiplatform.ui.SkeletonState
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementFloatingActionButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementTextButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CustomDialog
@@ -44,7 +45,7 @@ import kotlinx.coroutines.launch
 
 class TransactionsPage : NavigablePage() {
     override val title: String = "Transaktionen"
-    override val iconUnicode: String = "\ue1f3"
+    override val iconUnicode: String = "\uf81d"
     override val floatingActionButton: @Composable () -> Unit = {
         ScreenWidthBreakpoint(
             width = CustomDialog.maxDialogContainerWidth,
@@ -94,7 +95,12 @@ class TransactionsPage : NavigablePage() {
                     val transaction: Transaction = transactions[index]
                     ListItem(
                         headlineContent = { Text(category.label) },
-                        leadingContent = { CustomIcon(name = category.icon) },
+                        leadingContent = {
+                            CustomIcon(
+                                name = category.icon,
+                                style = RegularStyle()
+                            )
+                        },
                         supportingContent = {
                             transaction.description?.let {
                                 if (it.isNotBlank()) Text(it)
@@ -175,7 +181,6 @@ class TransactionsPage : NavigablePage() {
     }
 
     private suspend fun saveTransaction() {
-        println(form.getValues())
         if (form.hasErrors()) return
         val values: MutableMap<String, Any?> = form.getValues()
         if (dialogTransaction == null) {

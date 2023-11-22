@@ -4,7 +4,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.Form
-import com.lennartmoeller.ma_compose_multiplatform.ui.form.inputs.FormInput
 
 @Composable
 fun TextFormInput(

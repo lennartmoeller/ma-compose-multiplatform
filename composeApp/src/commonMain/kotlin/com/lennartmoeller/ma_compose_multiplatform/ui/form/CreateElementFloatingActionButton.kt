@@ -1,5 +1,6 @@
 package com.lennartmoeller.ma_compose_multiplatform.ui.form
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
@@ -17,12 +18,13 @@ import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 fun CreateElementFloatingActionButton(onClick: () -> Unit) {
     FloatingActionButton(onClick = onClick) {
         Row(
-            modifier = Modifier.padding(start = 8.dp, end = 16.dp),
+            modifier = Modifier.padding(start = 12.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CustomIcon(
                 unicode = "2b",
-                size = 18.sp,
+                size = 16.sp,
                 style = RegularStyle(),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )

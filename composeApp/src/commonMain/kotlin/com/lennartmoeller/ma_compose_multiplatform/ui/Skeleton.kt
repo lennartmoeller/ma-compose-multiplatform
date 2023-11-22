@@ -55,7 +55,9 @@ class SkeletonState(private val pages: List<NavigablePage>) {
         private val COMPRESSED_SIDEBAR_WIDTH = 80.dp
         private val EXTENDED_SIDEBAR_WIDTH = 220.dp
         private val MIN_CONTENT_WIDTH = 500.dp
-        private val HEADER_HEIGHT = 100.dp
+        private val HEADER_HEIGHT_WIDE_DEVICES = 100.dp
+        private val HEADER_HEIGHT_THIN_DEVICES = 80.dp
+        private val CONTENT_PADDING_WIDE_DEVICES = 16.dp
         val PAGE_BOTTOM_PADDING = 14.dp
     }
 
@@ -76,7 +78,7 @@ class SkeletonState(private val pages: List<NavigablePage>) {
     private fun RenderThinDevice() {
         Scaffold(
             topBar = {
-                Header(menuButton = true)
+                Header(thinDevice = true)
             },
             bottomBar = {
                 NavigationBar {
@@ -116,7 +118,7 @@ class SkeletonState(private val pages: List<NavigablePage>) {
                     header = {
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier.height(HEADER_HEIGHT - 8.dp)
+                            modifier = Modifier.height(HEADER_HEIGHT_WIDE_DEVICES - 8.dp)
                         ) { MenuButton() }
                     },
                     content = {
@@ -136,7 +138,7 @@ class SkeletonState(private val pages: List<NavigablePage>) {
                         .fillMaxWidth()
                 ) {
                     Header()
-                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    Box(modifier = Modifier.padding(horizontal = CONTENT_PADDING_WIDE_DEVICES)) {
                         pages[currentPageIndex].build()
                     }
                 }
@@ -160,8 +162,8 @@ class SkeletonState(private val pages: List<NavigablePage>) {
                             contentAlignment = Alignment.CenterStart,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(HEADER_HEIGHT)
-                                .padding(start = 28.dp)
+                                .height(HEADER_HEIGHT_WIDE_DEVICES)
+                                .padding(start = 21.dp)
                         ) { MenuButton() }
                         PermanentDrawerSheet(
                             modifier = Modifier.padding(horizontal = 16.dp),
@@ -204,7 +206,7 @@ class SkeletonState(private val pages: List<NavigablePage>) {
                         Box(
                             modifier = Modifier
                                 .background(MaterialTheme.colorScheme.surface)
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = CONTENT_PADDING_WIDE_DEVICES)
                         ) {
                             pages[currentPageIndex].build()
                         }
@@ -228,26 +230,30 @@ class SkeletonState(private val pages: List<NavigablePage>) {
         CustomIcon(
             unicode = page.iconUnicode,
             style = if (isSelected) SolidStyle() else RegularStyle(),
-            opacity = if (isSelected) .9f else NAV_ITEM_UNSELECTED_OPACITY,
+            opacity = if (isSelected) .8f else NAV_ITEM_UNSELECTED_OPACITY,
         )
     }
 
     @Composable
-    private fun Header(menuButton: Boolean = false) {
-        val padding = (HEADER_HEIGHT - 52.dp) / 4
+    private fun Header(thinDevice: Boolean = false) {
+        val headerHeight =
+            if (thinDevice) HEADER_HEIGHT_THIN_DEVICES else HEADER_HEIGHT_WIDE_DEVICES
+        val paddingItems = (headerHeight - 52.dp) / 4
+        val paddingSides =
+            if (thinDevice) paddingItems * 2 else CONTENT_PADDING_WIDE_DEVICES + paddingItems
         Box(
             modifier = Modifier
                 .statusBarsPadding() // avoid that header is under StatusBar in Android
                 .background(MaterialTheme.colorScheme.surface)
                 .fillMaxWidth()
-                .height(HEADER_HEIGHT)
-                .padding(horizontal = padding * 2)
+                .height(headerHeight)
+                .padding(horizontal = paddingSides)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(padding)
+                horizontalArrangement = Arrangement.spacedBy(paddingItems)
             ) {
-                if (menuButton) MenuButton()
+                if (thinDevice) MenuButton()
                 pages[currentPageIndex].headerLeading.forEach { it() }
                 Column(
                     verticalArrangement = Arrangement.Center,

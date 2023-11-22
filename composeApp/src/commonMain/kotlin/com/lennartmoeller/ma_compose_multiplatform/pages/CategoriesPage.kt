@@ -18,6 +18,7 @@ import com.lennartmoeller.ma_compose_multiplatform.entities.PutResponse
 import com.lennartmoeller.ma_compose_multiplatform.ui.SkeletonState
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementFloatingActionButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementTextButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CustomDialog
@@ -64,7 +65,7 @@ class CategoriesPage : NavigablePage() {
                 val category: Category = categories[index]
                 ListItem(
                     headlineContent = { Text(category.label) },
-                    leadingContent = { CustomIcon(name = category.icon) },
+                    leadingContent = { CustomIcon(name = category.icon, style = RegularStyle()) },
                     modifier = Modifier.clickable(onClick = {
                         dialog.open(); dialogCategory = category
                     })

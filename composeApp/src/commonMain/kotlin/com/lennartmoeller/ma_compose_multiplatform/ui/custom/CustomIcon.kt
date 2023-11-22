@@ -7,9 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -17,7 +15,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lennartmoeller.ma_compose_multiplatform.database.Database
 import com.lennartmoeller.ma_compose_multiplatform.ui.util.Font
@@ -46,7 +43,8 @@ fun CustomIcon(
     val realOpacity = if (opacity == 1f && unicodeStr == "\u003f") .5f else opacity
     // square box to make sure the icon is centered
     Box(
-        modifier = Modifier.size(with(LocalDensity.current) { size.toPx() }.dp),
+        // square all icons
+        modifier = Modifier.size(with(LocalDensity.current) { (size * 4 / 3).toDp() }),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -56,15 +54,9 @@ fun CustomIcon(
             color = color,
             maxLines = 1,
             overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .alpha(realOpacity)
-                // icons are a little too high, so move them down
-                .drawWithContent {
-                    val shift = size * 0.05 // got 0.05 by trying
-                    translate(top = shift.toPx()) {
-                        this@drawWithContent.drawContent()
-                    }
-                }
+            // overrides settings by parent widgets
+            lineHeight = 0.sp,
+            modifier = Modifier.alpha(realOpacity),
         )
     }
 }

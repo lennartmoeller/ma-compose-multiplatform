@@ -5,13 +5,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.Form
 
 @Composable
@@ -51,7 +54,7 @@ fun <T : Any> FormInput(
                 onValueChange(value)
             }
         },
-        leadingIcon = { CustomIcon(unicode = iconUnicode) },
+        leadingIcon = { CustomIcon(unicode = iconUnicode, style = RegularStyle()) },
         isError = errorMessage != null,
         supportingText = {
             if (errorMessage != null) {
@@ -65,5 +68,9 @@ fun <T : Any> FormInput(
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
         keyboardOptions = keyboardOptions,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+        ),
     )
 }

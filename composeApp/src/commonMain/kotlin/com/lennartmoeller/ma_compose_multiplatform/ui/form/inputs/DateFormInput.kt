@@ -22,8 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomTextButton
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.Form
 import com.lennartmoeller.ma_compose_multiplatform.util.GermanDate
 
@@ -51,7 +54,7 @@ fun DateFormInput(
         TextField(
             label = { Text(label) },
             value = text,
-            leadingIcon = { CustomIcon(unicode = iconUnicode) },
+            leadingIcon = { CustomIcon(unicode = iconUnicode, style = RegularStyle()) },
             singleLine = true,
             onValueChange = {},
             // disabling is necessary to make it clickable
@@ -64,6 +67,7 @@ fun DateFormInput(
                 disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
                 disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
                 disabledLeadingIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
+                disabledContainerColor = Color.Transparent,
             ),
         )
     }
@@ -93,11 +97,10 @@ fun DateFormInput(
                 }
             },
             dismissButton = {
-                TextButton(
-                    onClick = { openPicker = false }
-                ) {
-                    Text("Verwerfen")
-                }
+                CustomTextButton(
+                    onClick = { openPicker = false },
+                    label = "Verwerfen",
+                )
             }
         ) {
             DatePicker(

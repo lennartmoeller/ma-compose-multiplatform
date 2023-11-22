@@ -18,6 +18,7 @@ import com.lennartmoeller.ma_compose_multiplatform.entities.PutResponse
 import com.lennartmoeller.ma_compose_multiplatform.ui.SkeletonState
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomDivider
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementFloatingActionButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CreateElementTextButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.form.CustomDialog
@@ -63,9 +64,10 @@ class AccountsPage : NavigablePage() {
                 val account: Account = accounts[index]
                 ListItem(
                     headlineContent = { Text(account.label) },
-                    leadingContent = { CustomIcon(name = account.icon) },
+                    leadingContent = { CustomIcon(name = account.icon, style = RegularStyle()) },
                     modifier = Modifier.clickable(onClick = {
-                        dialog.open(); dialogAccount = account
+                        dialog.open()
+                        dialogAccount = account
                     })
                 )
                 // divider if not last item

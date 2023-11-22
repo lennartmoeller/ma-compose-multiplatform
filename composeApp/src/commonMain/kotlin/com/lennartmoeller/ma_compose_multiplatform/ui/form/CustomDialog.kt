@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomIcon
+import com.lennartmoeller.ma_compose_multiplatform.ui.custom.CustomTextButton
 import com.lennartmoeller.ma_compose_multiplatform.ui.custom.RegularStyle
 import com.lennartmoeller.ma_compose_multiplatform.ui.util.ScreenWidthBreakpoint
 import kotlinx.coroutines.launch
@@ -124,8 +124,8 @@ class CustomDialog {
                 Row(
                     modifier = Modifier
                         .height(56.dp)
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(onClick = onClose) {
@@ -138,11 +138,9 @@ class CustomDialog {
                     Text(
                         title,
                         modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
-                    TextButton(onClick = onSave) {
-                        Text("Speichern")
-                    }
+                    CustomTextButton(onClick = onSave, label = "Speichern")
                 }
                 content()
             }
@@ -172,16 +170,8 @@ class CustomDialog {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    TextButton(
-                        onClick = onClose
-                    ) {
-                        Text("Verwerfen")
-                    }
-                    TextButton(
-                        onClick = onSave
-                    ) {
-                        Text("Speichern")
-                    }
+                    CustomTextButton(onClick = onClose, label = "Verwerfen")
+                    CustomTextButton(onClick = onSave, label = "Speichern")
                 }
             }
         }
