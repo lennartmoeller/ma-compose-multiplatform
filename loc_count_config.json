@@ -1,0 +1,27 @@
+{
+    "count_lines_begin_with": [
+        "package ",
+        "import "
+    ],
+    "exclude_dir": [
+        ".git",
+        ".gitignore",
+        ".run",
+        "androidApp/src/androidMain/res",
+        "cleanup.sh",
+        "composeApp/src/androidMain/res",
+        "desktopApp",
+        "gradle/wrapper",
+        "gradlew",
+        "gradlew.bat",
+        "iosApp",
+        "LICENSE.txt",
+        "loc_count_config.json",
+        "README.md",
+        "readme_images",
+        "shared/src/commonMain/resources"
+    ],
+    "exclude_filenames": [
+        ".DS_Store"
+    ]
+}
