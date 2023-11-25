@@ -10,6 +10,8 @@
         "androidApp/src/androidMain/res",
         "cleanup.sh",
         "composeApp/src/androidMain/res",
+        "composeApp/src/commonMain/resources",
+        "composeApp/src/commonMain/kotlin/com/lennartmoeller/ma_compose_multiplatform/ui/theme",
         "desktopApp",
         "gradle/wrapper",
         "gradlew",
@@ -19,7 +21,9 @@
         "loc_count_config.json",
         "README.md",
         "readme_images",
-        "shared/src/commonMain/resources"
+        "shared/src/commonMain/resources",
+        "shared/src/commonMain/kotlin/ui/theme",
+        "shared/src/commonMain/kotlin/com/lennartmoeller/ma/composemultiplatform/ui/theme"
     ],
     "exclude_filenames": [
         ".DS_Store"
